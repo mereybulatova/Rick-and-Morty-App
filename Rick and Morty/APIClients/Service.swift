@@ -27,7 +27,7 @@ final class Service {
             return
         }
         
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, _, error in
+        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] data, _, error in
             guard let data = data, error == nil else {
                 completion(.failure(error ?? ServiceError.failetToGetData))
                 return
@@ -46,7 +46,8 @@ final class Service {
     
     private func request(from Request: Request) -> URLRequest? {
         guard let url = Request.url else {
-            return nil }
+            return nil
+        }
         var request = URLRequest(url: url)
         request.httpMethod = Request.httpMethod
         return request
